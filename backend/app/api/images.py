@@ -161,7 +161,7 @@ async def upload_image_file(
 
     Args:
         file: Uploaded file
-        image_type: Type of medical image
+        image_type: Type of crop image
         patient_id: Optional patient ID
         study_id: Optional study ID
         storage_service: Storage service instance

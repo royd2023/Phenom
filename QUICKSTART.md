@@ -4,62 +4,71 @@ Get the Universal Crop Health Scanner running in 5 minutes!
 
 ## Prerequisites
 
-✅ Python 3.10+
-✅ Node.js 18+
-✅ Docker & Docker Compose
+✅ Python 3.10+  
+✅ Node.js 18+  
+✅ Docker & Docker Compose  
+✅ **Supabase account** (free) - [Sign up here](https://supabase.com)
 
-## Option 1: Docker (Recommended for Quick Start)
+## Team Setup (Do This First!)
+
+**One person on your team** should set up Supabase, then share credentials with everyone.
+
+👉 **Follow**: [docs/team-setup.md](docs/team-setup.md) for complete Supabase setup
+
+**Quick version:**
+1. Create Supabase project at [supabase.com](https://supabase.com)
+2. Create storage bucket named `crop-images`
+3. Share DATABASE_URL, SUPABASE_URL, and SUPABASE_KEY with team
+
+## Individual Developer Setup
+
+### 1. Get Team Credentials
+
+Ask your team lead (Person B) for:
+- `DATABASE_URL`
+- `SUPABASE_URL`
+- `SUPABASE_KEY`
+
+### 2. Configure Environment
 
 ```bash
-# Clone and navigate
 cd Phenom
 
-# Start all services
-docker-compose up
+# Copy environment template
+cp .env.example .env
 
-# Access:
-# - Backend API: http://localhost:8000/api/docs
-# - Database: localhost:5432
-# - PgAdmin: http://localhost:5050 (dev profile)
+# Edit .env and paste your team's Supabase credentials
+nano .env  # or code .env, or vim .env
 ```
 
-That's it! The backend is running.
+### 3. Start Backend
 
-## Option 2: Manual Setup (Development)
+**Option A: Docker (Recommended)**
 
-### Backend
+```bash
+docker-compose up
+```
+
+**Option B: Manual**
 
 ```bash
 cd backend
-
-# Setup virtual environment
 python -m venv venv
 venv\Scripts\activate  # Windows
 # source venv/bin/activate  # Linux/Mac
 
-# Install dependencies
 pip install -r requirements.txt
-
-# Configure environment
-cp .env.example .env
-# Edit .env and set your values
-
-# Run
 uvicorn app.main:app --reload
 ```
 
-**Backend running at:** http://localhost:8000
+**Backend running at:** http://localhost:8000  
 **API Docs:** http://localhost:8000/api/docs
 
-### Frontend Mobile
+### 4. Start Frontend Mobile
 
 ```bash
 cd frontend/mobile
-
-# Install dependencies
 npm install
-
-# Start Expo
 npm start
 
 # Scan QR code with Expo Go app
@@ -86,54 +95,43 @@ Expected response:
 
 ## Next Steps
 
-1. **Read the docs:**
-   - [Setup Guide](docs/setup.md) - Detailed setup instructions
-   - [Architecture](docs/architecture.md) - System design
-   - [Roadmap](docs/roadmap.md) - 90-day plan
-   - [Contributing](CONTRIBUTING.md) - How to contribute
-
-2. **Configure storage:**
-   - Sign up for [Supabase](https://supabase.com) (free tier)
-   - Create a storage bucket named `crop-images`
-   - Add credentials to `backend/.env`
-
-3. **Download ML models:**
+1. **Download ML models** (optional for initial testing):
    ```bash
    cd ml-pipeline/models
    # Download SAM model (choose based on your GPU)
    wget https://dl.fbaipublicfiles.com/segment_anything/sam_vit_b_01ec64.pth
    ```
 
-4. **Test the mobile app:**
-   - Open Expo Go on your phone
-   - Scan the QR code
-   - Try the camera feature
-   - Note: Analysis won't work until ML models are configured
+2. **Read the docs:**
+   - [Team Setup](docs/team-setup.md) - Supabase configuration
+   - [Setup Guide](docs/setup.md) - Detailed setup
+   - [Architecture](docs/architecture.md) - System design
+   - [Roadmap](docs/roadmap.md) - 90-day plan
 
-5. **Start developing:**
+3. **Start developing:**
    - Check GitHub Issues for tasks
-   - Read the roadmap for current priorities
+   - Read the roadmap for priorities
    - Join team discussions
 
 ## Troubleshooting
 
 **Backend won't start:**
+- Check DATABASE_URL in .env is correct
+- Verify Supabase project is active
 - Check Python version: `python --version` (should be 3.10+)
-- Activate virtual environment
-- Install dependencies: `pip install -r requirements.txt`
+
+**"Connection refused" to database:**
+- Verify Supabase credentials in .env
+- Check Supabase dashboard - project might be paused
 
 **Frontend errors:**
 - Clear cache: `npx expo start --clear`
 - Reinstall: `rm -rf node_modules && npm install`
 
-**Docker issues:**
-- Check ports aren't in use: `docker-compose down`
-- Rebuild: `docker-compose build --no-cache`
-
-**Database connection errors:**
-- Make sure PostgreSQL is running
-- Check `DATABASE_URL` in `.env`
-- Test connection: `docker-compose exec postgres psql -U uchs_user -d uchs_db`
+**Images not uploading:**
+- Verify SUPABASE_BUCKET=crop-images in .env
+- Check bucket exists in Supabase Storage
+- Ensure bucket policies allow uploads
 
 ## Project Structure
 
@@ -163,9 +161,12 @@ npm test                               # Run tests
 npm run lint                           # Lint code
 
 # Docker
-docker-compose up                      # Start all
+docker-compose up                      # Start backend
 docker-compose down                    # Stop all
 docker-compose logs -f backend         # View logs
+
+# Local DB (offline development)
+docker-compose --profile local-db up   # Use local PostgreSQL instead of Supabase
 ```
 
 ## Resources
@@ -174,12 +175,13 @@ docker-compose logs -f backend         # View logs
 - 🐛 [Report Issues](https://github.com/your-org/phenom/issues)
 - 💬 [Discussions](https://github.com/your-org/phenom/discussions)
 - 📖 [API Docs](http://localhost:8000/api/docs) (when running)
+- 🗄️ [Supabase Dashboard](https://supabase.com/dashboard)
 
 ## Team Roles
 
 As outlined in the roadmap:
 - **Person A**: Frontend/Mobile + UI/UX
-- **Person B**: Backend + ML Pipeline
+- **Person B**: Backend + ML Pipeline + **Supabase Admin**
 - **Person C**: Data + User Research
 
 Happy coding! 🌱🚀

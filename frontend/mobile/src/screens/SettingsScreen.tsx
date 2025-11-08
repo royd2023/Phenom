@@ -51,13 +51,12 @@ export default function SettingsScreen() {
   const handleExportData = () => {
     Alert.alert(
       'Export Data',
-      'Export test history as CSV file',
+      'Export scan history as CSV file',
       [
         { text: 'Cancel', style: 'cancel' },
         {
           text: 'Export',
           onPress: () => {
-            // TODO: Implement export functionality
             Alert.alert('Coming Soon', 'Export feature will be available soon');
           },
         },
@@ -73,7 +72,7 @@ export default function SettingsScreen() {
             <Title>General Settings</Title>
             <List.Item
               title="Enable Notifications"
-              description="Receive alerts for test results"
+              description="Receive alerts for crop scan results"
               right={() => (
                 <Switch
                   value={notifications}
@@ -84,7 +83,7 @@ export default function SettingsScreen() {
             <Divider />
             <List.Item
               title="Auto-save Results"
-              description="Automatically save test results to history"
+              description="Automatically save crop scan results to history"
               right={() => (
                 <Switch
                   value={autoSave}
@@ -100,7 +99,7 @@ export default function SettingsScreen() {
             <Title>Camera Settings</Title>
             <List.Item
               title="High Quality Images"
-              description="Use higher resolution for better accuracy"
+              description="Use higher resolution for better crop analysis"
               right={() => (
                 <Switch
                   value={highQuality}
@@ -115,15 +114,15 @@ export default function SettingsScreen() {
           <Card.Content>
             <Title>Data Management</Title>
             <List.Item
-              title="Export Test History"
-              description="Download all test results as CSV"
+              title="Export Scan History"
+              description="Download all crop scan results as CSV"
               left={(props) => <List.Icon {...props} icon="download" />}
               onPress={handleExportData}
             />
             <Divider />
             <List.Item
               title="Clear Cache"
-              description="Remove cached images and data"
+              description="Remove cached crop images and data"
               left={(props) => <List.Icon {...props} icon="delete" />}
               onPress={handleClearCache}
             />
@@ -155,12 +154,12 @@ export default function SettingsScreen() {
 
         <Card style={styles.disclaimerCard}>
           <Card.Content>
-            <Title style={styles.disclaimerTitle}>Medical Disclaimer</Title>
+            <Title style={styles.disclaimerTitle}>Agricultural Disclaimer</Title>
             <Text style={styles.disclaimerText}>
-              U-CHS is intended for screening purposes only and should not replace
-              professional medical advice, diagnosis, or treatment. Always seek the
-              advice of your physician or other qualified health provider with any
-              questions you may have regarding a medical condition.
+              U-CHS (Universal Crop Health Scanner) is intended for crop stress screening
+              purposes only and should not replace professional agricultural advice. For
+              critical farming decisions, always consult with agronomists, crop
+              specialists, or agricultural extension services.
             </Text>
           </Card.Content>
         </Card>

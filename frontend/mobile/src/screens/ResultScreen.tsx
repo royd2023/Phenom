@@ -54,7 +54,7 @@ export default function ResultScreen() {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" />
-        <Text style={styles.loadingText}>Analyzing test strip...</Text>
+        <Text style={styles.loadingText}>Analyzing crop health...</Text>
       </View>
     );
   }
@@ -144,7 +144,7 @@ export default function ResultScreen() {
             <Title style={styles.disclaimerTitle}>Disclaimer</Title>
             <Paragraph>
               These results are for screening purposes only. Please consult with a
-              healthcare professional for proper medical diagnosis and treatment.
+              agronomists or crop specialists.
             </Paragraph>
           </Card.Content>
         </Card>

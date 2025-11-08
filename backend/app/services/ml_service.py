@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 
 class MLService:
-    """Machine Learning service for medical image analysis."""
+    """Machine Learning service for crop image analysis."""
 
     def __init__(self):
         """Initialize ML service with models."""
@@ -81,7 +81,7 @@ class MLService:
         include_segmentation: bool = True,
     ) -> Dict[str, Any]:
         """
-        Analyze medical image using Grounding DINO and SAM.
+        Analyze crop image using Grounding DINO and SAM.
 
         Args:
             image_data: Raw image bytes

@@ -8,10 +8,12 @@ import { useGetTestHistoryQuery } from '../services/api';
 
 type HistoryScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'MainTabs'>;
 
-interface TestHistoryItem {
+interface ScanHistoryItem {
   id: string;
   timestamp: string;
-  overallStatus: 'normal' | 'abnormal' | 'warning';
+  cropType: string;
+  severity: 'none' | 'low' | 'medium' | 'high';
+  stressDetected: boolean;
   imageUri: string;
 }
 
@@ -23,47 +25,54 @@ export default function HistoryScreen() {
     limit: 20
   });
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'normal':
+  const getSeverityColor = (severity: string) => {
+    switch (severity) {
+      case 'none':
         return '#4CAF50';
-      case 'abnormal':
-        return '#F44336';
-      case 'warning':
+      case 'low':
+        return '#8BC34A';
+      case 'medium':
         return '#FF9800';
+      case 'high':
+        return '#F44336';
       default:
         return '#757575';
     }
   };
 
-  const handleTestPress = (item: TestHistoryItem) => {
+  const handleScanPress = (item: ScanHistoryItem) => {
     navigation.navigate('Result', {
       testId: item.id,
       imageUri: item.imageUri,
     });
   };
 
-  const renderItem = ({ item }: { item: TestHistoryItem }) => (
-    <TouchableOpacity onPress={() => handleTestPress(item)}>
+  const renderItem = ({ item }: { item: ScanHistoryItem }) => (
+    <TouchableOpacity onPress={() => handleScanPress(item)}>
       <Card style={styles.card}>
         <Card.Content>
           <View style={styles.cardHeader}>
-            <View style={styles.dateContainer}>
-              <Text style={styles.date}>
-                {new Date(item.timestamp).toLocaleDateString()}
+            <View style={styles.infoContainer}>
+              <Text style={styles.cropType}>
+                {item.cropType.charAt(0).toUpperCase() + item.cropType.slice(1)}
               </Text>
-              <Text style={styles.time}>
-                {new Date(item.timestamp).toLocaleTimeString()}
-              </Text>
+              <View style={styles.dateContainer}>
+                <Text style={styles.date}>
+                  {new Date(item.timestamp).toLocaleDateString()}
+                </Text>
+                <Text style={styles.time}>
+                  {new Date(item.timestamp).toLocaleTimeString()}
+                </Text>
+              </View>
             </View>
             <Chip
               style={[
                 styles.statusChip,
-                { backgroundColor: getStatusColor(item.overallStatus) }
+                { backgroundColor: getSeverityColor(item.severity) }
               ]}
               textStyle={styles.statusChipText}
             >
-              {item.overallStatus}
+              {item.severity}
             </Chip>
           </View>
         </Card.Content>
@@ -73,9 +82,9 @@ export default function HistoryScreen() {
 
   const renderEmpty = () => (
     <View style={styles.emptyContainer}>
-      <Text style={styles.emptyText}>No test history available</Text>
+      <Text style={styles.emptyText}>No scan history available</Text>
       <Paragraph style={styles.emptySubtext}>
-        Start a new test to see results here
+        Scan your first crop to see results here
       </Paragraph>
     </View>
   );
@@ -83,7 +92,7 @@ export default function HistoryScreen() {
   if (isLoading && page === 1) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" />
+        <ActivityIndicator size="large" color="#4CAF50" />
       </View>
     );
   }
@@ -91,7 +100,7 @@ export default function HistoryScreen() {
   if (error) {
     return (
       <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>Failed to load test history</Text>
+        <Text style={styles.errorText}>Failed to load scan history</Text>
         <Button mode="contained" onPress={() => refetch()}>
           Retry
         </Button>
@@ -102,7 +111,7 @@ export default function HistoryScreen() {
   return (
     <View style={styles.container}>
       <FlatList
-        data={data?.tests || []}
+        data={data?.scans || []}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listContent}
@@ -137,12 +146,21 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  dateContainer: {
+  infoContainer: {
     flex: 1,
   },
-  date: {
+  cropType: {
     fontSize: 16,
     fontWeight: 'bold',
+    color: '#4CAF50',
+    marginBottom: 4,
+  },
+  dateContainer: {
+    marginTop: 2,
+  },
+  date: {
+    fontSize: 14,
+    fontWeight: '600',
     color: '#333',
   },
   time: {

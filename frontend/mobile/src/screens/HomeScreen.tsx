@@ -10,7 +10,7 @@ type HomeScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'M
 export default function HomeScreen() {
   const navigation = useNavigation<HomeScreenNavigationProp>();
 
-  const handleStartTest = () => {
+  const handleStartScan = () => {
     navigation.navigate('Camera');
   };
 
@@ -19,24 +19,24 @@ export default function HomeScreen() {
       <View style={styles.content}>
         <Card style={styles.card}>
           <Card.Content>
-            <Title style={styles.title}>Welcome to U-CHS</Title>
+            <Title style={styles.title}>Universal Crop Health Scanner</Title>
             <Paragraph style={styles.subtitle}>
-              Urine Culture Health Screening
+              AI-Powered Plant Stress Detection
             </Paragraph>
             <Paragraph style={styles.description}>
-              Quick and accurate urinalysis using AI-powered image recognition
+              Zero-shot plant phenotyping using SAM + Grounding DINO
             </Paragraph>
           </Card.Content>
         </Card>
 
         <Button
           mode="contained"
-          onPress={handleStartTest}
+          onPress={handleStartScan}
           style={styles.startButton}
           contentStyle={styles.startButtonContent}
           icon="camera"
         >
-          Start New Test
+          Scan Crop
         </Button>
 
         <Card style={styles.infoCard}>
@@ -44,19 +44,19 @@ export default function HomeScreen() {
             <Title style={styles.infoTitle}>How it works</Title>
             <View style={styles.stepContainer}>
               <Text style={styles.stepNumber}>1</Text>
-              <Text style={styles.stepText}>Collect urine sample using test strip</Text>
+              <Text style={styles.stepText}>Take a photo of your crop or plant leaves</Text>
             </View>
             <View style={styles.stepContainer}>
               <Text style={styles.stepNumber}>2</Text>
-              <Text style={styles.stepText}>Wait for color changes (60 seconds)</Text>
+              <Text style={styles.stepText}>Select your crop type (lettuce, basil, tomato, etc.)</Text>
             </View>
             <View style={styles.stepContainer}>
               <Text style={styles.stepNumber}>3</Text>
-              <Text style={styles.stepText}>Capture clear photo of the test strip</Text>
+              <Text style={styles.stepText}>Enter what to detect (e.g., "nitrogen stress", "disease")</Text>
             </View>
             <View style={styles.stepContainer}>
               <Text style={styles.stepNumber}>4</Text>
-              <Text style={styles.stepText}>Get instant AI-powered results</Text>
+              <Text style={styles.stepText}>Get instant AI-powered crop health analysis</Text>
             </View>
           </Card.Content>
         </Card>
@@ -65,8 +65,8 @@ export default function HomeScreen() {
           <Card.Content>
             <Title style={styles.warningTitle}>Important</Title>
             <Paragraph>
-              This app is for screening purposes only. Always consult with a healthcare
-              professional for medical diagnosis and treatment decisions.
+              This app provides crop stress screening and recommendations. For critical
+              agricultural decisions, consult with agronomists or crop specialists.
             </Paragraph>
           </Card.Content>
         </Card>
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#6200EE',
+    color: '#4CAF50',
     textAlign: 'center',
   },
   subtitle: {
@@ -108,6 +108,7 @@ const styles = StyleSheet.create({
   startButton: {
     marginBottom: 20,
     borderRadius: 8,
+    backgroundColor: '#4CAF50',
   },
   startButtonContent: {
     paddingVertical: 8,
@@ -130,7 +131,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#6200EE',
+    backgroundColor: '#4CAF50',
     color: 'white',
     textAlign: 'center',
     lineHeight: 32,

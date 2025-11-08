@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: uchs-postgres
+    environment:
+      POSTGRES_USER: uchs_user
+      POSTGRES_PASSWORD: uchs_password
+      POSTGRES_DB: uchs_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - uchs-network
+
+  # Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: uchs-backend
+    environment:
+      DATABASE_URL: postgresql://uchs_user:uchs_password@postgres:5432/uchs_db
+      SECRET_KEY: ${SECRET_KEY:-dev-secret-key-change-in-production}
+      DEBUG: ${DEBUG:-True}
+    volumes:
+      - ./backend/app:/app/app
+      - ./ml-pipeline/models:/app/ml-pipeline/models
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    networks:
+      - uchs-network
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  # Optional: PgAdmin for database management
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: uchs-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@uchs.local
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - uchs-network
+    profiles:
+      - dev
+
+volumes:
+  postgres_data:
+
+networks:
+  uchs-network:
+    driver: bridge
