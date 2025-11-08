@@ -1,0 +1,1 @@
+"""U-CHS Backend Application"""
