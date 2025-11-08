@@ -1,61 +1,18 @@
 version: '3.8'
 
 services:
-  # Backend API (using Supabase for database)
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    container_name: uchs-backend
-    env_file:
-      - .env
-    environment:
-      # Use Supabase PostgreSQL (shared team database)
-      DATABASE_URL: ${DATABASE_URL}
+  # TODO: Add backend service
+  # TODO: Add Supabase services (postgres, auth, storage, etc.)
+  # TODO: Add ML inference service
 
-      # Supabase Storage  
-      STORAGE_PROVIDER: supabase
-      SUPABASE_URL: ${SUPABASE_URL}
-      SUPABASE_KEY: ${SUPABASE_KEY}
-      SUPABASE_BUCKET: ${SUPABASE_BUCKET:-crop-images}
+  supabase-db:
+    image: supabase/postgres:latest
+    # TODO: Add configuration
 
-      # Application Settings
-      SECRET_KEY: ${SECRET_KEY}
-      DEBUG: ${DEBUG:-True}
+  supabase-auth:
+    image: supabase/gotrue:latest
+    # TODO: Add configuration
 
-      # ML Models
-      MODEL_CACHE_DIR: /app/ml-pipeline/models
-      USE_GPU: ${USE_GPU:-False}
-    volumes:
-      - ./backend/app:/app/app
-      - ./ml-pipeline/models:/app/ml-pipeline/models
-    ports:
-      - "8000:8000"
-    networks:
-      - uchs-network
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
-
-  # Optional: Local PostgreSQL for offline development only
-  # To use local DB instead of Supabase, run: docker-compose --profile local-db up
-  postgres-local:
-    image: postgres:15-alpine
-    container_name: uchs-postgres-local
-    environment:
-      POSTGRES_USER: uchs_user
-      POSTGRES_PASSWORD: uchs_password
-      POSTGRES_DB: uchs_db
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-    networks:
-      - uchs-network
-    profiles:
-      - local-db
-
-volumes:
-  postgres_data:
-
-networks:
-  uchs-network:
-    driver: bridge
+  supabase-storage:
+    image: supabase/storage-api:latest
+    # TODO: Add configuration
